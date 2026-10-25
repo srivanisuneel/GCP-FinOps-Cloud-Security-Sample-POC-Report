@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GCP FinOps & Cloud Security – Enterprise Technology (POC)</title>
+<style>
+:root{--bg:#f3f1ea;--card:#ffffff;--ink:#2a2f29;--mute:#6a7064;--line:#dad6c8;--top:#2f4a3a;--y:#7ea486;--c1:#5f8a6b;--c2:#3d5a49;--c3:#b05a4c;--c4:#c4a85f;--c5:#a3bba9;--c6:#c68d62;--c7:#8b8199;--c8:#6f7a6c;--g:#4e8559;--a:#a97f2a;--r:#a24c42;--hg:#bcd3c1;--ha:#e6dcb2;--hr:#e2b9ae;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.4 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.top{background:var(--top);color:#fff;display:flex;align-items:center;gap:14px;padding:8px 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.logo{width:22px;height:22px;display:flex;gap:2px;align-items:flex-end}.logo i{display:block;width:5px;background:var(--y);border-radius:1px}
+.top b{font-weight:600}.top span{color:#c8c6c4;font-size:12px}.top .sp{flex:1}
+.top button{background:none;border:1px solid #605e5c;color:#fff;border-radius:2px;padding:3px 9px;cursor:pointer;font:inherit;font-size:12px}
+.note{background:#ebe6cf;color:#575026;border-bottom:1px solid #d5cfae;padding:5px 16px;font-size:12px}
+.wrap{display:flex;min-height:calc(100vh - 80px)}
+.rail{width:178px;background:var(--card);border-right:1px solid var(--line);padding:10px 0;flex:none}
+.rail h6{margin:6px 14px;color:var(--mute);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.rail a{display:block;padding:9px 14px;cursor:pointer;border-left:4px solid transparent;color:var(--ink)}
+.rail a:hover{background:rgba(128,128,128,.12)}.rail a.on{border-left-color:var(--y);background:rgba(95,138,107,.14);font-weight:600}
+.main{flex:1;min-width:0;padding:12px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.bar label{color:var(--mute);font-size:12px}
+.bar select{background:var(--card);color:var(--ink);border:1px solid var(--line);padding:4px 6px;font:inherit}
+.chip{border:1px solid var(--line);background:var(--card);padding:3px 9px;cursor:pointer;font-size:12px;border-radius:2px;color:var(--ink)}
+.chip.on{background:var(--c2);color:#fff;border-color:var(--c2)}
+:root[data-theme="dark"] .chip.on{color:#111}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:10px 12px;min-width:0}.sep{width:1px;height:20px;background:var(--line);margin:0 6px}.bar{row-gap:6px}
+.card h4{margin:0 0 6px;font-size:12.5px;font-weight:600}.card h4 small{font-weight:400;color:var(--mute)}
+.k{grid-column:span 3}.k .l{color:var(--mute);font-size:11.5px}.k .v{font-size:25px;font-weight:600;margin:2px 0}.k .s{font-size:11.5px}
+.g{color:var(--g)}.rr{color:var(--r)}.am{color:var(--a)}
+.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.hb{display:grid;grid-template-columns:110px 1fr 70px;gap:8px;align-items:center;margin:5px 0;cursor:pointer}
+.hb .t{height:15px;background:rgba(128,128,128,.14);position:relative}.hb .f{height:100%}.hb .m{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.hb.dim{opacity:.35}.hb span:last-child{text-align:right}
+.stack{display:flex;height:15px}.stack i{display:block;height:100%}
+table{width:100%;border-collapse:collapse;font-size:12px}th{text-align:left;color:var(--mute);font-weight:600;border-bottom:2px solid var(--line);padding:5px 6px;cursor:pointer;white-space:nowrap}
+td{padding:5px 6px;border-bottom:1px solid var(--line)}tr.dim td{opacity:.35}td.n,th.n{text-align:right}
+.sc{overflow-x:auto}
+.hm td{text-align:center;color:#111;font-weight:600}.hm .gg{background:var(--hg)}.hm .aa{background:var(--ha)}.hm .bb{background:var(--hr)}
+.hm td:first-child{text-align:left;font-weight:400;color:var(--ink);background:none}
+select.st{background:var(--card);color:var(--ink);border:1px solid var(--line);font-size:12px}
+.pill{padding:1px 7px;border-radius:9px;font-size:11px;color:#111}
+#tip{position:fixed;pointer-events:none;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.25);padding:6px 9px;font-size:12px;display:none;z-index:9;max-width:220px}
+.leg{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--mute);margin-top:4px}.leg i{display:inline-block;width:9px;height:9px;margin-right:4px}
+footer{color:var(--mute);font-size:11.5px;padding:10px 4px}
+@media(max-width:900px){.rail{display:none}.k{grid-column:span 6}.s4,.s5,.s6,.s7,.s8{grid-column:span 12}.mt{display:flex!important}}
+.mt{display:none;gap:6px;margin-bottom:8px}
+</style></head><body>
+<div class="top"><div class="logo"><i style="height:9px"></i><i style="height:15px"></i><i style="height:21px"></i></div>
+<b>Enterprise Technology</b><span>GCP FinOps & Security Report</span><div class="sp"></div><span>Sample data</span></div>
+<div class="note"><b>Note:</b> This dashboard is a proof of concept developed with sample data. Figures are illustrative only and do not represent actual enterprise cloud spend or security posture.</div>
+<div class="wrap"><nav class="rail"><h6>Pages</h6><a data-t="0" class="on">Executive overview</a><a data-t="1">Cost optimization</a><a data-t="2">Security & governance</a></nav>
+<div class="main"><div class="mt" id="mt"></div><div class="bar" id="bar"></div><div class="grid" id="out"></div>
+<footer>Source (sample): GCP Billing export → BigQuery · Security Command Center · Cloud Asset Inventory · Recommender API → Power BI semantic model. Click any department bar or row to cross-filter the page; click again to clear. Cost pages respond to the Period and Department slicers; security views show the latest snapshot.</footer></div></div>
+<div id="tip"></div>
+<script>
+const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],NOW=10;
+const PL=[['Today','Today'],['Yesterday','Yesterday'],['MTD','Oct MTD'],['Aug','Aug'],['Q3','Q3'],['Q2','Q2'],['Q1','Q1'],['YTD','YTD 2026']];
+const ENVF={All:1,Prod:.68,'Non-prod':.32},EF=()=>ENVF[S.env];
+const SV=['Compute Engine','BigQuery','GKE','Cloud Storage','Networking','Vertex AI & other'],SC=['--c1','--c2','--c4','--c5','--c6','--c7'];
+// n, base monthly KWD K, service shares, label%, CUD%, idle%, sec[crit,high,med,low], mfa, cmek, public, saKeys, iam, vpcsc, resid
+const D=[
+{n:'IT & Digital',b:92,sh:[.38,.14,.22,.1,.1,.06],lab:94,cud:71,idle:7,sec:[2,9,21,30],mfa:99,cmek:92,pub:1,sak:4,iam:6,vpc:95,res:100},
+{n:'Operations',b:78,sh:[.45,.08,.24,.08,.1,.05],lab:88,cud:64,idle:11,sec:[3,12,26,34],mfa:96,cmek:84,pub:2,sak:7,iam:9,vpc:88,res:100},
+{n:'Engineering',b:64,sh:[.4,.1,.3,.08,.07,.05],lab:81,cud:52,idle:16,sec:[4,15,33,41],mfa:93,cmek:76,pub:3,sak:11,iam:14,vpc:79,res:97},
+{n:'Data & Analytics',b:70,sh:[.12,.55,.06,.12,.05,.1],lab:86,cud:38,idle:9,sec:[2,10,19,25],mfa:98,cmek:90,pub:1,sak:5,iam:7,vpc:93,res:100},
+{n:'Customer Service',b:36,sh:[.35,.1,.25,.1,.15,.05],lab:91,cud:60,idle:8,sec:[1,6,14,19],mfa:97,cmek:88,pub:0,sak:3,iam:4,vpc:90,res:100},
+{n:'Finance',b:28,sh:[.4,.2,.1,.15,.1,.05],lab:96,cud:68,idle:5,sec:[0,3,8,12],mfa:100,cmek:97,pub:0,sak:1,iam:2,vpc:98,res:100},
+{n:'Procurement',b:12,sh:[.45,.1,.15,.15,.1,.05],lab:72,cud:30,idle:19,sec:[1,4,9,11],mfa:90,cmek:70,pub:1,sak:3,iam:5,vpc:72,res:94},
+{n:'HR',b:14,sh:[.4,.1,.1,.25,.1,.05],lab:90,cud:45,idle:10,sec:[0,2,6,9],mfa:100,cmek:94,pub:0,sak:1,iam:2,vpc:96,res:100}];
+const cost=(d,m)=>d.b*(1+.022*m)*(1+.06*Math.sin(m*1.7+d.b))+(d.n=='Data & Analytics'&&m==5?38:0);
+const bud=d=>d.b*1.1*EF();
+const OP=[ // title, dept idx, KWD K/month, effort, category
+['Delete 214 idle VMs (CPU<5% for 30d)',2,9.4,'Low','Idle'],['Rightsize over-provisioned GKE node pools',1,11.8,'Medium','Rightsizing'],
+['Buy 3-yr Compute CUDs for steady workloads',2,14.6,'Low','Commitments'],['BigQuery: move to slot reservations + partition pruning',3,12.2,'Medium','Data'],
+['Storage lifecycle: Standard → Nearline/Coldline',3,5.1,'Low','Storage'],['Remove 380 unattached persistent disks & snapshots',0,3.7,'Low','Idle'],
+['Schedule dev/test shutdown (nights & Fri–Sat)',2,6.9,'Low','Scheduling'],['Release orphan static IPs & unused load balancers',1,1.4,'Low','Idle'],
+['Spot VMs for batch & CI workloads',0,4.8,'High','Rightsizing'],['Cloud NAT / egress optimisation via Private Google Access',4,2.3,'Medium','Network'],
+['Label remediation to enable full showback',6,0.9,'Low','Governance'],['Archive HR logs older than 400 days',7,0.6,'Low','Storage']];
+const L=[1,3,5,6,7,8,2,4,6,5,3,7],I=L.map(l=>Math.max(0,l-2));
+const pf=i=>{if(S.per=='Today'||S.per=='Yesterday')return L[i]<=9?1/31:0;let t=0;const a=rng();for(let m=Math.max(a[0],L[i]);m<=a[1];m++)t+=m==9?24/31:1;return t};
+const S={tab:0,dept:null,per:'MTD',env:'All',st:OP.map((o,i)=>i%4==0?'Implemented':i%4==1?'Approved':'Identified'),sort:{}};
+const $=s=>document.querySelector(s),f=x=>x>=1000?(x/1000).toFixed(2)+'M':x.toFixed(1)+'K',p=x=>x.toFixed(1)+'%';
+const rng=()=>({Today:[9,9],Yesterday:[9,9],MTD:[9,9],Aug:[7,7],Q1:[0,2],Q2:[3,5],Q3:[6,8],YTD:[0,9]}[S.per]);
+const bf=()=>({Today:1/31,Yesterday:1/31,MTD:24/31,Aug:1,Q1:3,Q2:3,Q3:3,YTD:9+24/31}[S.per]);
+const sum=(d,a)=>{const dm=!a;a=a||rng();let t=0;for(let m=a[0];m<=a[1];m++)t+=cost(d,m)*(m==9?24/31:1)*EF();return dm&&(S.per=='Today'||S.per=='Yesterday')?cost(d,9)*EF()*(S.per=='Today'?.88:.86)/31:t};
+const sel=()=>S.dept==null?D:[D[S.dept]];
+const tot=(ds,a)=>ds.reduce((s,d)=>s+sum(d,a),0);
+const wavg=(k,ds=sel())=>{let w=0,t=0;ds.forEach(d=>{w+=d.b;t+=d.b*d[k]});return t/w};
+const kp=(l,v,s,c='')=>`<div class="card k"><div class="l">${l}</div><div class="v">${v}</div><div class="s ${c}">${s}</div></div>`;
+const rag=v=>v>=90?'gg':v>=75?'aa':'bb';
+function hb(rows,fmt,mark){return rows.map(r=>`<div class="hb ${S.dept!=null&&S.dept!=r.i?'dim':''}" data-d="${r.i}" data-tip="<b>${D[r.i].n}</b><br>${r.tip||fmt(r.v)}"><span>${D[r.i].n}</span><div class="t"><div class="f" style="width:${r.v/rows.max*100}%;background:var(${r.c||'--c1'})"></div>${r.m!=null?`<div class="m" style="left:${r.m/rows.max*100}%"></div>`:''}</div><span>${fmt(r.v)}</span></div>`).join('')}
+function rows(arr){arr.max=Math.max(...arr.map(r=>Math.max(r.v,r.m||0)))*1.05;return arr}
+function trend(ds){const W=620,H=230,l=40,b=24,pw=W-l-10,ph=H-b-10;
+const act=[],bg=[];for(let m=0;m<12;m++){act.push(m<NOW?tot(ds,[m,m]):null);bg.push(ds.reduce((s,d)=>s+bud(d),0)*(m==9?24/31:1))}
+const last=(act[6]+act[7]+act[8])/3;
+for(let m=NOW;m<12;m++)act[m]=last*(1+.02*(m-NOW+1));
+const mx=Math.max(...act,...bg)*1.1,X=m=>l+pw/12*(m+.5),Y=v=>10+ph-v/mx*ph;
+let s=`<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line x1="${l}" x2="${W-10}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line)"/><text x="${l-5}" y="${Y(v)+4}" text-anchor="end" font-size="10" fill="var(--mute)">${v.toFixed(0)}</text>`}
+act.forEach((v,m)=>{const fc=m>=NOW,inr=m>=rng()[0]&&m<=rng()[1];s+=`<rect x="${X(m)-14}" y="${Y(v)}" width="28" height="${Y(0)-Y(v)}" fill="${fc?'none':'var(--c1)'}" ${fc?'stroke="var(--c1)" stroke-dasharray="3 3"':''} opacity="${fc||inr?1:.45}" data-tip="<b>${M[m]} 2026${fc?' (forecast)':m==9?' MTD (1–24 Oct)':''}</b><br>Spend: KWD ${v.toFixed(1)}K<br>Budget: KWD ${bg[m].toFixed(1)}K<br>Variance: ${((v/bg[m]-1)*100).toFixed(1)}%"/><text x="${X(m)}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--mute)">${M[m]}</text>`});
+s+=`<polyline fill="none" stroke="var(--c3)" stroke-width="2" points="${bg.map((v,m)=>X(m)+','+Y(v)).join(' ')}"/></svg><div class="leg"><span><i style="background:var(--c1)"></i>Actual</span><span><i style="border:1px dashed var(--c1)"></i>Forecast</span><span><i style="background:var(--c3)"></i>Budget</span><span>KWD K</span></div>`;
+return{s,fy:act.reduce((a,c)=>a+c,0)+ds.reduce((x,d)=>x+cost(d,9)*EF()*7/31,0),bt:bg.reduce((a,c)=>a+c,0)+ds.reduce((x,d)=>x+bud(d)*7/31,0)}}
+function donut(vals,labels,cols){const t=vals.reduce((a,c)=>a+c,0),C=2*Math.PI*40;let o=0,s='<svg viewBox="0 0 120 120" width="150" style="flex:none"><g transform="rotate(-90 60 60)">';
+vals.forEach((v,i)=>{const d=v/t*C;s+=`<circle cx="60" cy="60" r="40" fill="none" stroke="var(${cols[i]})" stroke-width="20" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${-o}" data-tip="<b>${labels[i]}</b><br>KWD ${f(v)} (${(v/t*100).toFixed(1)}%)"/>`;o+=d});
+s+=`</g><text x="60" y="64" text-anchor="middle" font-size="12" font-weight="600" fill="var(--ink)">${f(t)}</text></svg>`;
+return`<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">${s}<div class="leg" style="flex-direction:column;gap:3px">${labels.map((l,i)=>`<span><i style="background:var(${cols[i]})"></i>${l} · ${(vals[i]/t*100).toFixed(0)}%</span>`).join('')}</div></div>`}
+function sortTbl(id,hd,data,render){const st=S.sort[id]||{c:0,d:1};data.sort((a,b)=>(a[st.c]>b[st.c]?1:-1)*st.d);
+return`<div class="sc"><table><tr>${hd.map((h,i)=>`<th class="${i>0?'n':''}" data-s="${id}|${i}">${h}${st.c==i?(st.d>0?' ▲':' ▼'):''}</th>`).join('')}</tr>${data.map(render).join('')}</table></div>`}
+const card=(c,t,b,sub='')=>`<div class="card ${c}"><h4>${t} <small>${sub}</small></h4>${b}</div>`;
+const per=()=>({Today:'24 Oct 2026',Yesterday:'23 Oct 2026',MTD:'1–24 Oct 2026',Aug:'Aug 2026',Q1:'Q1 2026',Q2:'Q2 2026',Q3:'Q3 2026',YTD:'Jan–24 Oct 2026'}[S.per]);
+function overview(){const ds=sel(),T=trend(ds),sp=tot(ds),bd=ds.reduce((s,d)=>s+bud(d)*bf(),0),vr=(sp/bd-1)*100,an=S.dept==null||S.dept==3?1:0;
+const sv=SV.map((_,i)=>ds.reduce((s,d)=>s+sum(d)*d.sh[i],0));
+const r=rows(D.map((d,i)=>({i,v:sum(d),m:bud(d)*bf(),c:sum(d)>bud(d)*bf()?'--c3':'--c1',tip:`Spend KWD ${f(sum(d))}<br>Budget KWD ${f(bud(d)*bf())}`})).sort((a,b)=>b.v-a.v));
+const tx=2.4*bf();
+const data=D.map((d,i)=>{const c=sum(d),b=bud(d)*bf();return[d.n,c,b,(c/b-1)*100,d.lab,(cost(d,8)/cost(d,7)-1)*100,i]});
+return kp('Cloud spend · '+per(),'KWD '+f(sp),'Budget KWD '+f(bd))+kp('Budget variance',(vr>0?'+':'')+p(vr),vr>0?'Over budget':'Within budget',vr>0?'rr':'g')+
+kp('FY2026 forecast','KWD '+f(T.fy),`vs budget ${f(T.bt)} · ${(T.fy/T.bt*100-100).toFixed(1)}%`,T.fy>T.bt?'rr':'g')+
+kp('Label / tag coverage',p(wavg('lab')),'Target ≥ 95% for showback',wavg('lab')>=95?'g':'am')+
+kp('Unit cost','KWD '+(sp/tx).toFixed(2),'per 1,000 e-service transactions','')+kp('CUD coverage',p(wavg('cud')),'Committed use discounts, eligible spend',wavg('cud')>=70?'g':'am')+
+kp('Cost anomalies (30d)',an+(S.dept==null?2:0),an?'BigQuery spike · Data & Analytics (Jun +KWD 38K)':'No open anomalies',an?'rr':'g')+kp('Cost / vCPU-hour','KWD 0.0182','−4.1% vs previous quarter','g')+
+card('s7','Monthly spend vs budget',T.s,S.dept==null?'All departments':D[S.dept].n)+card('s5','Spend by GCP service',donut(sv,SV,SC),per())+
+card('s6','Spend by department vs budget','<div style="font-size:11px;color:var(--mute)">Bar = actual · black tick = budget · red = over budget</div>'+hb(r,v=>f(v)),'click to filter')+
+card('s6','Showback / chargeback',sortTbl('ov',['Department','Spend K','Budget K','Var %','Label %','MoM % (Sep)'],data,x=>`<tr class="${S.dept!=null&&S.dept!=x[6]?'dim':''}" data-d="${x[6]}"><td>${x[0]}</td><td class="n">${x[1].toFixed(1)}</td><td class="n">${x[2].toFixed(1)}</td><td class="n ${x[3]>0?'rr':'g'}">${x[3].toFixed(1)}</td><td class="n ${x[4]<85?'rr':''}">${x[4]}</td><td class="n">${x[5].toFixed(1)}</td></tr>`),'sortable')}
+function optim(){const ds=sel(),sp=tot(ds),e=rng()[1],mm=(rng()[0]+e)/2,idx=OP.map((o,i)=>i).filter(i=>(S.dept==null||OP[i][1]==S.dept)&&I[i]<=e);
+const pot=idx.reduce((s,i)=>s+OP[i][2],0),live=idx.filter(i=>S.st[i]=='Implemented'&&L[i]<=e),real=live.reduce((s,i)=>s+OP[i][2],0),apr=idx.filter(i=>S.st[i]=='Approved'||live.includes(i)).reduce((s,i)=>s+OP[i][2],0),inP=live.reduce((s,i)=>s+OP[i][2]*pf(i),0);
+const avg=sp/bf();
+const cats={};idx.forEach(i=>cats[OP[i][4]]=(cats[OP[i][4]]||0)+OP[i][2]);const cm=Math.max(...Object.values(cats),1);
+const cu=d=>Math.min(98,Math.max(5,d.cud+(mm-6)*.9)),id=d=>Math.max(1,d.idle*(1+(6-mm)*.035)),wa=g=>ds.reduce((t,d)=>t+d.b*g(d),0)/ds.reduce((t,d)=>t+d.b,0);
+const cr=rows(D.map((d,i)=>({i,v:+cu(d).toFixed(1),c:cu(d)<50?'--c3':'--c1'})).sort((a,b)=>b.v-a.v));cr.max=100;
+const ir=rows(D.map((d,i)=>({i,v:+id(d).toFixed(1),c:id(d)>12?'--c3':'--c6'})).sort((a,b)=>b.v-a.v));
+return kp('Identified savings / month','KWD '+pot.toFixed(1)+'K',p(pot/avg*100)+' of monthly spend','am')+kp('Realized in '+per(),'KWD '+inP.toFixed(1)+'K','Delivered by implemented items','g')+
+kp('Savings realization rate',p(pot?real/pot*100:0),'Implemented ÷ identified',real/pot>.5?'g':'am')+kp('Annualized impact','KWD '+(real*12).toFixed(0)+'K','Run-rate of realized savings','g')+
+kp('Idle resource waste',p(wa(id)),'Compute & disk with <5% utilisation',wa(id)>10?'rr':'g')+kp('CUD utilization',(90+mm*.4).toFixed(1)+'%','Commitments consumed','g')+
+kp('Rightsizing candidates',idx.filter(i=>OP[i][4]=='Rightsizing').length*46+'','VMs / node pools flagged by Recommender','am')+kp('Cost avoidance · '+per(),'KWD '+f(sp*.045),'Budget guardrails & quota policies','g')+
+card('s8','Savings opportunities backlog','<div style="font-size:11px;color:var(--mute);margin-bottom:4px">Change status to update realized savings and KPIs.</div>'+sortTbl('op',['Opportunity','Department','Save K/mo','Effort','Status'],idx.map(i=>[OP[i][0],D[OP[i][1]].n,OP[i][2],OP[i][3],S.st[i],i]),x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td class="n">${x[2].toFixed(1)}</td><td class="n">${x[3]}</td><td class="n"><select class="st" data-o="${x[5]}">${['Identified','Approved','Implemented'].map(o=>`<option ${o==x[4]?'selected':''}>${o}</option>`).join('')}</select></td></tr>`))+
+card('s4','Savings funnel (KWD K / month)',[['Identified',pot,'--c5'],['Approved',apr,'--c4'],['Implemented',real,'--c1']].map(a=>`<div class="hb" style="grid-template-columns:80px 1fr 50px;cursor:default" data-tip="${a[0]}: KWD ${a[1].toFixed(1)}K"><span>${a[0]}</span><div class="t"><div class="f" style="width:${pot?a[1]/pot*100:0}%;background:var(${a[2]})"></div></div><span>${a[1].toFixed(1)}</span></div>`).join('')+'<h4 style="margin-top:14px">Savings by category</h4>'+Object.entries(cats).map(([k,v])=>`<div class="hb" style="grid-template-columns:90px 1fr 40px;cursor:default"><span>${k}</span><div class="t"><div class="f" style="width:${v/cm*100}%;background:var(--c2)"></div></div><span>${v.toFixed(1)}</span></div>`).join(''))+
+card('s6','CUD coverage by department','<div style="font-size:11px;color:var(--mute)">Target ≥ 70%</div>'+hb(cr,v=>v+'%'),'click to filter')+card('s6','Idle resource waste % by department',hb(ir,v=>v+'%'),'click to filter')}
+function secur(){const ds=sel(),sum4=ds.reduce((a,d)=>a.map((x,i)=>x+d.sec[i]),[0,0,0,0]),W=k=>wavg(k),sk=100-(sum4[0]*4+sum4[1]*1.2+sum4[2]*.25)/ (ds.length*2.2)*1.1;
+const score=Math.max(40,Math.min(99,sk+(S.dept==null?0:0)));
+const cols=['--c3','--c6','--c4','--c5'],nm=['Critical','High','Medium','Low'];
+const r=D.map((d,i)=>({i,t:d.sec.reduce((a,c)=>a+c,0),d}));const mx=Math.max(...r.map(x=>x.t));
+const sevb=r.sort((a,b)=>b.t-a.t).map(x=>`<div class="hb ${S.dept!=null&&S.dept!=x.i?'dim':''}" data-d="${x.i}" data-tip="<b>${x.d.n}</b><br>${nm.map((n,k)=>n+': '+x.d.sec[k]).join('<br>')}"><span>${x.d.n}</span><div class="stack" style="width:${x.t/mx*100}%">${x.d.sec.map((v,k)=>`<i style="width:${v/x.t*100}%;background:var(${cols[k]})"></i>`).join('')}</div><span>${x.t}</span></div>`).join('');
+const sum=a=>ds.reduce((s,d)=>s+d[a],0);
+const tr=[];for(let m=0;m<NOW;m++)tr.push(Math.round((sum4[0]*3+sum4[1])*(1.45-m*.065)+Math.sin(m*2)*3));
+const mxT=Math.max(...tr)*1.1,pts=tr.map((v,i)=>`${30+i*58},${110-v/mxT*100}`).join(' ');
+const line=`<svg viewBox="0 0 580 130" width="100%"><polyline fill="none" stroke="var(--c3)" stroke-width="2.5" points="${pts}"/>${tr.map((v,i)=>`<circle cx="${30+i*58}" cy="${110-v/mxT*100}" r="4" fill="var(--c3)" data-tip="<b>${M[i]}</b><br>Open critical+high: ${v}"/><text x="${30+i*58}" y="126" font-size="10" text-anchor="middle" fill="var(--mute)">${M[i]}</text>`).join('')}</svg>`;
+const bm=[['CIS GCP Foundation 2.0',91],['ISO/IEC 27001 controls',88],['CITRA data classification (sample)',86],['NIST 800-53 (SCC)',84],['PCI-DSS (payment workloads)',93]];
+const cols2=[['MFA','mfa'],['CMEK','cmek'],['VPC-SC','vpc'],['In-region data','res']];
+return kp('Security score',score.toFixed(0)+' / 100','Security Command Center composite',score>=80?'g':'am')+kp('Open critical + high',sum4[0]+sum4[1],sum4[0]+' critical · '+sum4[1]+' high','rr')+
+kp('Public exposure',sum('pub'),'Buckets / VMs reachable from internet',sum('pub')?'rr':'g')+kp('MFA / 2SV coverage',p(W('mfa')),'Cloud Identity users',W('mfa')>=98?'g':'am')+
+kp('CMEK encryption',p(W('cmek')),'Datasets & buckets with customer keys',W('cmek')>=90?'g':'am')+kp('MTTR critical',S.dept==null?'3.8 days':(2+S.dept*.5).toFixed(1)+' days','SLA 5 days · −0.7d vs Q2','g')+
+kp('Over-privileged IAM',sum('iam'),'Owner / Editor on projects',sum('iam')>10?'rr':'am')+kp('SA keys > 90 days',sum('sak'),'User-managed keys to rotate',sum('sak')>8?'rr':'am')+
+card('s6','Open findings by severity & department','<div class="leg" style="margin:0 0 4px">'+nm.map((n,i)=>`<span><i style="background:var(${cols[i]})"></i>${n}</span>`).join('')+'</div>'+sevb,'click to filter')+
+card('s6','Open critical + high findings trend',line,'sample SCC export')+
+card('s6','Compliance by framework',bm.map(b=>`<div class="hb" style="grid-template-columns:190px 1fr 40px;cursor:default" data-tip="${b[0]}: ${b[1]}%"><span>${b[0]}</span><div class="t"><div class="f" style="width:${b[1]}%;background:var(${b[1]>=90?'--c1':'--c4'})"></div></div><span>${b[1]}%</span></div>`).join(''))+
+card('s6','Control coverage heatmap','<div class="sc"><table class="hm"><tr><th>Department</th>'+cols2.map(c=>`<th class="n">${c[0]}</th>`).join('')+'</tr>'+D.map((d,i)=>`<tr class="${S.dept!=null&&S.dept!=i?'dim':''}" data-d="${i}" style="cursor:pointer"><td>${d.n}</td>${cols2.map(c=>`<td class="${rag(d[c[1]])}">${d[c[1]]}%</td>`).join('')}</tr>`).join('')+'</table></div><div class="leg"><span><i style="background:var(--hg)"></i>≥ 90%</span><span><i style="background:var(--ha)"></i>75–89%</span><span><i style="background:var(--hr)"></i>&lt; 75%</span></div>')}
+function render(){const T=['Executive overview','Cost optimization','Security & governance'];
+document.querySelectorAll('.rail a').forEach((a,i)=>a.classList.toggle('on',i==S.tab));
+$('#mt').innerHTML=T.map((t,i)=>`<span class="chip ${i==S.tab?'on':''}" data-t="${i}">${t}</span>`).join('');
+$('#bar').innerHTML=`<label>Period</label>${PL.map(x=>`<span class="chip ${S.per==x[0]?'on':''}" data-p="${x[0]}">${x[1]}</span>`).join('')}<div style="flex-basis:100%;height:0"></div><label>Department</label><span class="chip ${S.dept==null?'on':''}" data-d="all">All</span>${D.map((d,i)=>`<span class="chip ${S.dept==i?'on':''}" data-d="${i}">${d.n}</span>`).join('')}`;
+$('#out').innerHTML=[overview,optim,secur][S.tab]()}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(t){S.tab=+t.dataset.t;render();return}
+const pp=e.target.closest('[data-p]');if(pp){S.per=pp.dataset.p;render();return}const ee=e.target.closest('[data-e]');if(ee){S.env=ee.dataset.e;render();return}const d=e.target.closest('[data-d]');if(d){const v=d.dataset.d=='all'?null:+d.dataset.d;S.dept=S.dept===v?null:v;render();return}
+const s=e.target.closest('[data-s]');if(s){const[id,c]=s.dataset.s.split('|'),o=S.sort[id]||{c:-1,d:1};S.sort[id]={c:+c,d:o.c==+c?-o.d:1};render()}});
+document.addEventListener('change',e=>{if(e.target.id=='per'){S.per=e.target.value;render()}if(e.target.dataset.o!=null){S.st[+e.target.dataset.o]=e.target.value;render()}});
+const tip=$('#tip');document.addEventListener('mousemove',e=>{const t=e.target.closest('[data-tip]');if(!t){tip.style.display='none';return}
+tip.innerHTML=t.dataset.tip;tip.style.display='block';tip.style.left=Math.min(e.clientX+14,innerWidth-230)+'px';tip.style.top=(e.clientY+14)+'px'});
+
+render();
+</script></body></html>
